@@ -37,7 +37,7 @@ rest_inspec =
     !is.na(score),
     !is.na(grade),
     boro !="Missing") %>%
-    sample_n(5000)
+    sample_n(1000)
 ```
 
 
@@ -45,7 +45,7 @@ rest_inspec =
 
 ### Chart A: Bar graph: Number of restaurant inspections in each borough
 
-```{r}
+```{r, echo =FALSE}
 rest_inspec %>% 
   count(boro) %>% 
   mutate(boro = fct_reorder(boro, n)) %>% 
@@ -60,7 +60,7 @@ rest_inspec %>%
 
 ### Chart B: Boxplot: Inspection Scores in each borough 
 
-```{r}
+```{r echo=FALSE}
 rest_inspec %>% 
   plot_ly(
     y = ~score, 
@@ -77,7 +77,7 @@ rest_inspec %>%
 
 ### Chart C: Dot Plot: Distribution of restaurant grades across boroughs
 
-```{r}
+```{r echo=FALSE}
 inspection_grades = 
   rest_inspec %>%
   mutate(text_label = str_c("Score", score, 'Grade', grade, sep = " ")) %>% 

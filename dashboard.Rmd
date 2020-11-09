@@ -1,0 +1,100 @@
+---
+title: "NYC Restaurant Plots"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+set.seed(5)
+
+data("rest_inspec")
+rest_inspec = 
+  rest_inspec %>%
+  filter(
+    !is.na(score),
+    !is.na(grade),
+    boro !="Missing") %>%
+    sample_n(1000)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart A: Bar graph: Number of restaurant inspections in each borough
+
+```{r,echo=FALSE}
+rest_inspec %>% 
+  count(boro) %>% 
+  mutate(boro = fct_reorder(boro, n)) %>% 
+  plot_ly(x = ~boro, y = ~n,color = ~boro, type = "bar") %>% 
+  layout(
+    xaxis = list(title = "Borough"), 
+    yaxis = list(title = "Number of Restaurant Inspections"))
+```
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Chart B: Boxplot: Inspection Scores in each borough 
+
+```{r,echo=FALSE}
+rest_inspec %>% 
+  plot_ly(
+    y = ~score, 
+    color = ~boro, 
+    type = "box",
+    colors = "Set1") %>% 
+  layout(
+    title = "Distribution of Restaurant Inspection Scores by Borough in NYC",
+    xaxis = list(title = "Borough"), 
+    yaxis = list(title = "Restaurant Inspection Score"))
+```
+
+### Chart C: Dot Plot: Distribution of restaurant grades across boroughs
+
+```{r,echo=FALSE}
+inspection_grades = 
+  rest_inspec %>%
+  mutate(text_label = str_c("Score", score, 'Grade', grade, sep = " ")) %>% 
+  plot_ly(
+    x = ~ score, 
+    y = ~ boro,  
+    type = "scatter", 
+    mode = "markers",
+    color = ~grade, 
+    text = ~text_label, 
+    alpha = 0.5) %>% 
+  layout(
+    title = "Distribution of Restaurant Grades by Borough",
+    xaxis = list(title = "Restaurant Scores"), 
+    yaxis = list(title = "Borough"))
+
+inspection_grades
+```
+
+

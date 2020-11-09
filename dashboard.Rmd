@@ -4,7 +4,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    source: embed
 ---
 
 ```{r setup, include=FALSE}
@@ -29,7 +28,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
-set.seed(5)
+set.seed(8)
 
 data("rest_inspec")
 rest_inspec = 
@@ -38,15 +37,15 @@ rest_inspec =
     !is.na(score),
     !is.na(grade),
     boro !="Missing") %>%
-    sample_n(1000)
+    sample_n(5000)
 ```
 
-Column {data-width=500}
+
 -----------------------------------------------------------------------
 
 ### Chart A: Bar graph: Number of restaurant inspections in each borough
 
-```{r,echo=FALSE}
+```{r}
 rest_inspec %>% 
   count(boro) %>% 
   mutate(boro = fct_reorder(boro, n)) %>% 
@@ -57,12 +56,11 @@ rest_inspec %>%
 ```
 
 
-Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### Chart B: Boxplot: Inspection Scores in each borough 
 
-```{r,echo=FALSE}
+```{r}
 rest_inspec %>% 
   plot_ly(
     y = ~score, 
@@ -75,9 +73,11 @@ rest_inspec %>%
     yaxis = list(title = "Restaurant Inspection Score"))
 ```
 
+-----------------------------------------------------------------------
+
 ### Chart C: Dot Plot: Distribution of restaurant grades across boroughs
 
-```{r,echo=FALSE}
+```{r}
 inspection_grades = 
   rest_inspec %>%
   mutate(text_label = str_c("Score", score, 'Grade', grade, sep = " ")) %>% 

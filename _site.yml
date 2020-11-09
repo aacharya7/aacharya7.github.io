@@ -5,10 +5,16 @@ navbar:
   right:
     - text: "About"
       href: about.html
+    - text: "Dashboard"
+      href: dashboard.html
     - icon: fa-envelope fa-lg
       href: mailto:<aa4478@columbia.edu>
     - icon: fa-github fa-lg
       href: http://github.com/aacharya7
+    - text: "LinkedIn"
+      href: https://www.linkedin.com/in/ayeshra-acharya-8894b8144/
+      
+
 output:
   html_document:
     theme: cerulean
